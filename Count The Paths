@@ -1,0 +1,71 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include<bits/stdc++.h>
+using namespace std;
+
+// Global declaration, for which I need not pass this as argument in the function.
+map <int,vector<int>> neighbours;  
+
+//To check if the node is visited or not
+int check(int a,vector<int>x){
+    for(auto c:x)
+        if(c==a)
+            return 0;
+    return 1;
+}
+
+// Recursive calling for all the nodes 
+int visited(int a,vector<int>x,int vertices){
+    static int count =0; //For safeguarding updated count of number of paths.
+    if(x.size()==vertices-1&&check(a,x)) // If we already visited n-1 nodes & didn't visit node a
+        count++;                         // Then increase the count by 1
+    for (auto i : neighbours[a]){
+        if(check(i,x)){
+            vector <int> nodes;          // New container,which is necessary for further calling for neighbouring nodes.
+            for (auto c : x)
+                nodes.push_back(c);      
+            nodes.push_back(a);         // To tell we visited node a
+            visited(i,nodes,vertices);  //Checking all the neighbours of a, if any node was unvisited or not.
+        }
+    }
+    return count;
+}
+
+int main() {
+
+    int n,m,a,b;
+    cin>>n>>m;
+    
+    //If there are maximum of 8 nodes, we require 8 vectors.
+    
+    vector <int> p1, p2, p3, p4, p5, p6, p7, p8;
+    
+    neighbours[1]=p1;
+    neighbours[2]=p2;
+    neighbours[3]=p3;
+    neighbours[4]=p4;
+    neighbours[5]=p5;
+    neighbours[6]=p6;
+    neighbours[7]=p7;
+    neighbours[8]=p8;
+    
+    int vertices=n;
+    
+    while (m--){
+    
+        cin>>a>>b;
+        
+        neighbours[a].push_back(b);
+        neighbours[b].push_back(a);
+        
+    }
+    
+    vector<int>nodes;
+    
+    cout<<visited(1,nodes,vertices)<<endl;  
+    
+    return 0;
+}
