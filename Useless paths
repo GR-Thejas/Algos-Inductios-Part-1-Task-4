@@ -5,9 +5,44 @@
 #include <algorithm>
 using namespace std;
 
+
 int main() {
-    int m,n;
+
+    int n,m,d[101][101]={0},p[101][101]={0},a,b,c,i,j,k,x,paths;
+    
     cin>>n>>m;
-    cout<<m-n+1; // If we need to travel all n nodes.  
+    paths=2*m;
+    
+    for(i=1;i<=n;i++)
+        for(j=1;j<=n;j++)
+            d[i][j]=pow(10,8);
+     
+    while(m--){
+        cin>>a>>b>>c;
+        d[a][b]=c; 
+        d[b][a]=c;
+        p[a][b]=-1; //Available path
+        p[b][a]=-1; //Available path
+    }
+    
+    //Relaxation
+    for(x=1;x<n;x++)
+        for(i=1;i<=n;i++)
+            for(j=1;j<=n;j++)
+                for(k=1;k<=n;k++)
+                    if(d[i][k]+d[k][j]<d[i][j]){
+                        d[i][j]=d[i][k]+d[k][j];
+                        p[i][j]=k;
+                    }
+                
+    for(i=1;i<=n;i++)
+        for(j=1;j<=n;j++)
+            if(p[i][j]==-1)
+                paths--;
+             
+    cout<<paths/2;
+    
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
     return 0;
+    
 }
